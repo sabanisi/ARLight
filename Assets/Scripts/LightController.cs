@@ -40,6 +40,7 @@ namespace Sabanishi
         /// </summary>
         public void OnGenerateButtonClicked()
         {
+            Debug.Log("Generate");
             _nowSelectedLightObject = Instantiate(_lightObjectPrefab);
             _nowSelectedLightObject.Initialize();
         }
@@ -49,6 +50,7 @@ namespace Sabanishi
         /// </summary>
         public void OnMoveButtonClicked()
         {
+            Debug.Log("Move");
             if (_nowSelectedLightObject == null) return;
             _nowSelectedLightObject.Model.Move().Forget();
         }
@@ -59,6 +61,7 @@ namespace Sabanishi
         /// </summary>
         public void OnTurnOnOffButtonClicked()
         {
+            Debug.Log("TurnOnOff");
             if (_nowSelectedLightObject == null) return;
             _nowSelectedLightObject.Model.TurnOnOff();
         }

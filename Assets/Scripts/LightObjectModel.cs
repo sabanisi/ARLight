@@ -8,6 +8,7 @@ namespace Sabanishi
     public class LightObjectModel
     {
         private const float MovingTime = 0.8f;
+        private const float OffSet = 0.15f;
         
         /// <summary>
         /// 移動中かどうか
@@ -31,6 +32,7 @@ namespace Sabanishi
         public LightObjectModel()
         {
             _pos = new ReactiveProperty<Vector3>();
+            _isOn = new ReactiveProperty<bool>(false);
         }
 
         /// <summary>
@@ -55,13 +57,20 @@ namespace Sabanishi
             DOTween.To(
                 () => _pos.Value,
                 pos => _pos.Value = pos,
-                _nextMovePos,
+                CalcNextPos(),
                 MovingTime
             ).OnComplete(() =>
             {
                 _isNextMovePositionSet = false;
                 _isMoving = false;
             });
+        }
+        
+        private Vector3 CalcNextPos()
+        {
+            float distance = (_nextMovePos- _pos.Value).magnitude;
+            distance -= OffSet;
+            return _pos.Value + (_nextMovePos - _pos.Value).normalized * distance;
         }
         
         /// <summary>

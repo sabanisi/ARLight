@@ -18,24 +18,28 @@ namespace Sabanishi
         /// <returns>(LightObjectがあるか、タップされたオブジェクト)</returns>
         public (bool,LightObjectPresenter) Detect()
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.touchCount > 0)
             {
-                //UIへのボタンタップがある場合、以降の処理を行わない
-                if (Input.GetMouseButtonDown(0))
+                var touch = Input.GetTouch(0);
+                if (touch.phase == TouchPhase.Began)
                 {
-                    if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+                    //UIへのボタンタップがある場合、以降の処理を行わない
+                    if (Input.GetMouseButtonDown(0))
                     {
-                        return (false,null);
+                        if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+                        {
+                            return (false, null);
+                        }
                     }
-                }
-                
-                var ray = _arCamera.ScreenPointToRay(Input.mousePosition);
-                var raycastHits = Physics.RaycastAll(ray, Mathf.Infinity, _lightObjectLayer).ToList();
-                if (raycastHits.Any())
-                {
-                    //タップされた位置にあるオブジェクトを取得
-                    var lightObj = raycastHits.First().collider.gameObject.GetComponent<LightObjectPresenter>();
-                    return (true, lightObj);
+                    
+                    var ray = _arCamera.ScreenPointToRay(Input.mousePosition);
+                    var raycastHits = Physics.RaycastAll(ray, Mathf.Infinity, _lightObjectLayer).ToList();
+                    if (raycastHits.Any())
+                    {
+                        //タップされた位置にあるオブジェクトを取得
+                        var lightObj = raycastHits.First().collider.gameObject.GetComponent<LightObjectPresenter>();
+                        return (true, lightObj);
+                    }
                 }
             }
             return (false, null);
