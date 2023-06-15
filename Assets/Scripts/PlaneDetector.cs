@@ -5,12 +5,12 @@ using UnityEngine.XR.ARSubsystems;
 
 namespace Sabanishi
 {
-    public class ARTest:MonoBehaviour
+    /// <summary>
+    /// 平面検知をし、タップされた場所を検知するクラス
+    /// </summary>
+    public class PlaneDetector:MonoBehaviour
     {
-        [SerializeField] private GameObject _spawnedObject;
-
         private ARRaycastManager _arRaycastManager;
-        private List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
         private void Start()
         {
@@ -19,15 +19,17 @@ namespace Sabanishi
 
         private void Update()
         {
+            var hits = new List<ARRaycastHit>();
             if (Input.touchCount > 0)
             {
-                Touch touch = Input.GetTouch(0);
+                var touch = Input.GetTouch(0);
                 if (touch.phase == TouchPhase.Began)
                 {
                     if (_arRaycastManager.Raycast(touch.position, hits, TrackableType.PlaneWithinPolygon))
                     {
                         Pose hiPose = hits[0].pose;
-                        Instantiate(_spawnedObject, hiPose.position, hiPose.rotation);
+                        
+                        //TODO:タップされた場所の情報を　　に送る
                     }
                 }
             }
